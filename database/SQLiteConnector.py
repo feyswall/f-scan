@@ -11,6 +11,7 @@ class SQLiteConnector:
         try:
             self.connection = sqlite3.connect(self.db_name)
             self.cursor = self.connection.cursor()
+            return self.cursor
             print(f"Connected to {self.db_name} successfully.")
         except sqlite3.Error as e:
             print(f"Error connecting to {self.db_name}: {e}")
@@ -19,4 +20,3 @@ class SQLiteConnector:
     def close_connection(self):
         if self.connection:
             self.connection.close()
-            print("Connection closed.")

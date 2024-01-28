@@ -4,17 +4,16 @@ from .SQLiteConnector import SQLiteConnector
 class QueryBuilder:
 
     def __init__(self):
-        connector = SQLiteConnector()
-        connector.connect()
-        self.connection = connector.connection
-        self.cursor = connector.cursor
+        self.connector = SQLiteConnector()
 
         
     def insert_setup(self, name, port, ip):
         insert_query = "INSERT INTO setups (name, port, ip) VALUES (?, ?, ?)"
         try:
-            self.cursor.execute(insert_query, (name, port, ip))
-            self.connection.commit()
+            self.connector.connect()
+            self.connector.cursor.execute(insert_query, (name, port, ip))
+            self.connector.connection.commit()
+            self.connector.close_connection()
             print("setup inserted successfully.")
         except sqlite3.Error as e:
             print(f"Error inserting setup: {e}")
@@ -23,8 +22,10 @@ class QueryBuilder:
     def get_all_setups(self):
         select_query = "SELECT * FROM setups"
         try:
-            self.cursor.execute(select_query)
-            rows = self.cursor.fetchall()
+            self.connector.connect()
+            self.connector.cursor.execute(select_query)
+            rows = self.connector.cursor.fetchall()
+            self.connector.close_connection()
             return rows
         except sqlite3.OperationalError as e:
             print(f"Error fetching setups: {e}")
@@ -34,14 +35,10 @@ class QueryBuilder:
     def get_setup(self, sid):
         select_query = "SELECT * FROM setups WHERE id=?"
         try:
-            self.cursor.execute(select_query, (sid))
-            rows = self.cursor.fetchall()
+            self.connector.connect()
+            self.connector.cursor.execute(select_query, (sid))
+            rows = self.connector.cursor.fetchone()
+            self.connector.close_connection()
             return rows
         except sqlite3.Error as e:
             print(f"Error fetching setups: {e}")
-
-    
-    def close_connection(self):
-        if self.connection:
-            self.connection.close()
-            print("Connection closed.")
