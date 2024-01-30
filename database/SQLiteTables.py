@@ -16,11 +16,9 @@ class SQLiteTables:
                 ip TEXT NOT NULL
             );
         '''
-        print(create_table_query)
         try:
             self.connector.cursor.execute(create_table_query)
             # self.connection.commit()
-            print("Table created successfully.")
         except sqlite3.Error as e:
             print(f"Error creating table: {e}")
 
