@@ -1,6 +1,7 @@
 import pygetwindow as gw
 import pyautogui
 import time
+import pyperclip
 
 class FrontWindows:
 
@@ -14,8 +15,10 @@ class FrontWindows:
         if active_window:
             # Activate the window
             active_window.activate()
+            # copying the text to clipboard
+            pyperclip.copy(text)
             # Type the text using pyautogui
-            pyautogui.typewrite(text)
+            pyautogui.hotkey('ctrl', 'v')
             time.sleep(1)  # You might need to adjust this delay based on the application's responsiveness
         else:
             print("No active window found.")

@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 pygetwindow = "*"
 pyautogui = "*"
+pyperclip = "*"
+pyinstaller = "*"
 
 [dev-packages]
 pyinstaller = "*"
